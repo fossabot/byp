@@ -21,11 +21,11 @@ html
       p
         b= "Message from server: " + msg
 
-    form(action="/_byp_submit_redirect")
+    form(action="submit")
       input(name="url" value="https://www.google.com")
       input(type="submit")
       | 
-      a(href="/_byp_clear_cookies") Clear Cookies (can fix things)
+      a(href="clearcookies") Clear Cookies (can fix things)
 
     p Source code will be on GitHub or something soon.
     p Contact me: tommyweber at gmail dot com

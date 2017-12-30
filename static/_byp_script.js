@@ -16,7 +16,7 @@
   "use strict";
 
   function parseLink(url) {
-    var link = document.createElement("a");
+    var link = window.document.createElement("a");
     link.href = link;
     return link;
   }
@@ -31,7 +31,7 @@
       }
     }
     if (link) {
-      if (link.href === location.href) {
+      if (link.href === window.location.href) {
         // relative link, let it do normal things because it'll work
         return;
       }
@@ -41,8 +41,8 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    var links = document.getElementsByTagName("a");
+  window.document.addEventListener("DOMContentLoaded", function () {
+    var links = window.document.getElementsByTagName("a");
     for (var i = 0; i < links.length; i++) {
       var link = links[i];
       link.onclick = onLinkClick;

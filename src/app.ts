@@ -6,7 +6,7 @@ import * as request from "request";
 import * as url from "url";
 
 import { logger } from "./logger";
-import { BypApp } from "./byp";
+import { BYP_API_ROUTE } from "./config";
 
 export const app = express();
 
@@ -23,4 +23,5 @@ app.use(cookieParser());
 
 app.use(express.static("static"));
 
-new BypApp(app);
+app.use(BYP_API_ROUTE, require("./routes/byp"));
+app.use(require("./routes/proxy"));
