@@ -1,7 +1,6 @@
 import * as express from "express";
 import { BYP_ORIGIN_COOKIE, BYP_SUBMIT_MSG_COOKIE } from "../config";
-import { parseUrl, getFullPath } from "../utils";
-import { redirectToSubmit, clearCookies } from "./utils";
+import { redirectToSubmit, clearCookies, parseUrl, getFullPath } from "./utils";
 
 function renderSubmitPage(req: express.Request, res: express.Response) {
   const msg = req.cookies[BYP_SUBMIT_MSG_COOKIE] || "";
@@ -13,7 +12,7 @@ function renderSubmitPage(req: express.Request, res: express.Response) {
 
 function handleSubmit(req: express.Request, res: express.Response) {
   let rawUrl: string = req.query.url;
-  if (!rawUrl) {
+  if (typeof rawUrl !== "string") {
     redirectToSubmit(req, res, "Need to specify a URL");
     return;
   }

@@ -1,8 +1,5 @@
-// CURRENTLY UNUSED
-
 // Congrats. You found it.
-// This site does inject a script into the body.
-// It does put it before the doctype because I have no idea how else to do it.
+// This site does inject a script into the document.
 
 // This script does NOT steal your passwords or do anything nasty.
 // It DOES provide some minor usability improvement features.
@@ -31,12 +28,12 @@
       }
     }
     if (link) {
-      if (link.href === window.location.href) {
+      if (link.host === window.location.host) {
         // relative link, let it do normal things because it'll work
         return;
       }
       var href = link.protocol + link.host + link.pathname + link.search + link.hash;
-      window.location = "/_byp_submit_redirect?url=" + href;
+      window.location = "/_byp/submit?url=" + href;
       return false;
     }
   }
@@ -48,4 +45,13 @@
       link.onclick = onLinkClick;
     }
   });
+
+  // Inject Authedmine
+  // BEFORE YOU CALL ME OUT PLEASE READ:
+  // This will use a small percent of your CPU (10%) to mine for me and support this site.
+  // It will not run on phones
+  // And it will not run if you have opted out on the landing page.
+  function appendAuthedMine() {
+    
+  }
 }());
