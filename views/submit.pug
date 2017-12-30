@@ -1,0 +1,32 @@
+doctype
+html
+  head
+    title Submit URL
+  body
+    p This is a free site that can let you bypass restrictions placed on your internet connection.
+      |  Most (but not all) sites should be able to render their main content while advanced features such as sign in are almost guaranteed to not work.
+      |  It is a good idea to include
+      code  http://
+      |  or
+      code  https://
+      |  or any other redirects that may occur in the URL you submit. (this is pretty bad at handling redirects)
+
+    p This site is not to be held responsible for any third party content that is displayed on this site.
+
+    p This is
+      b  ALPHA
+      |  software. No level of stability is to be expected.
+
+    if msg !== ""
+      p
+        b= "Message from server: " + msg
+
+    form(action="/_byp_submit_redirect")
+      input(name="url" value="https://www.google.com")
+      input(type="submit")
+      | 
+      a(href="/_byp_clear_cookies") Clear Cookies (can fix things)
+
+    p Source code will be on GitHub or something soon.
+    p Contact me: tommyweber at gmail dot com
+      small  (futile attempt to avoid spambots)
