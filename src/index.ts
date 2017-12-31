@@ -5,6 +5,7 @@ dotenv.config();
 import { logger } from "./logger";
 import * as errorhandler from "errorhandler";
 
+import { PORT } from "./config";
 import { app } from "./app";
 
 if (process.env.NODE_ENV !== "production") {
