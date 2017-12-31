@@ -45,13 +45,4 @@
       link.onclick = onLinkClick;
     }
   });
-
-  // Inject Authedmine
-  // BEFORE YOU CALL ME OUT PLEASE READ:
-  // This will use a small percent of your CPU (10%) to mine for me and support this site.
-  // It will not run on phones
-  // And it will not run if you have opted out on the landing page.
-  function appendAuthedMine() {
-    
-  }
 }());
