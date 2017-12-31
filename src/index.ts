@@ -1,10 +1,9 @@
-import { PORT } from "./config";
+// use dotenv to load environment variables before anything else loads
+import dotenv = require("dotenv");
+dotenv.config();
+
 import { logger } from "./logger";
 import * as errorhandler from "errorhandler";
-import dotenv = require("dotenv");
-
-// use dotenv to load environment variables
-dotenv.config();
 
 import { app } from "./app";
 
