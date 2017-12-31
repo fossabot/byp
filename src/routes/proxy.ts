@@ -25,6 +25,13 @@ function handleProxyRequest(req: express.Request, res: express.Response) {
     return;
   }
 
+  // remove cookies that are not the origin cookie
+  for (const key of Object.keys(req.cookies)) {
+    if (key !== BYP_ORIGIN_COOKIE) {
+      res.clearCookie(key);
+    }
+  }
+
   const targetUrl = originUrl + req.url;
   logger.info("Target URL: " + targetUrl);
 
