@@ -17,6 +17,7 @@ app.set("view engine", "pug");
 // morgan for logging
 app.use(morgan("short", {
   stream: {
+    // pipe morgan writes to winston and remove trailing newline
     write: (m: string) => logger.info(m.replace(/\n$/, "")),
   },
 }));
@@ -30,10 +31,19 @@ app.use(helmet.referrerPolicy()); // we don't want sites to see referred from us
 // we have a legitimate reason to avoid caching
 app.use(helmet.noCache());
 
+// normal stuff
 app.use(compression());
 app.use(cookieParser());
 
+// serves stuff from the static folder
 app.use(express.static("static"));
 
+// disable loading of favicon.ico
+app.get("/favicon.ico", (req, res) => res.status(404).send("Favicon loading is blocked."));
+
+// main API stuff
+// submit page, redirect, etc
 app.use(BYP_API_ROUTE, require("./routes/byp"));
+
+// proxy requests
 app.use(require("./routes/proxy"));

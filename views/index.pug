@@ -1,0 +1,55 @@
+doctype
+html
+  head
+    title _Byp
+  body
+    p Please read everything. It really will help.
+
+    hr
+
+    p This is a free site that can let you bypass restrictions placed on your internet connection.
+      |  Most (but not all) sites should be able to render their main content while advanced features such as sign in are almost guaranteed to not work.
+
+    p This site is not to be held responsible for any third party content that is displayed on this site.
+
+    p This is
+      b  ALPHA
+      |  software. No level of stability is to be expected.
+
+    hr
+
+    p Navigation buttons in your browser (back, refresh, etc) may be inconsistent.
+
+    p
+      b.
+        Entering credentials on this website if a terrible security risk and I would encourage you to not.
+        Treat anything entered on this site as compromised.
+        I will say that I don't look through the logs for passwords, but you cannot assume that I don't.
+
+    hr
+
+    P Enter a URL and click submit to try to load it.
+
+    if msg
+      p
+        b= "Message from server: " + msg
+
+    form(action="submit")
+      input(name="url" value="https://www.google.com")
+      input(type="submit")
+      | 
+      a(href="clearcookies") Clear Cookies (can fix things)
+      | 
+
+    p Contact me: tommyweber33 at gmail dot com
+      small  (futile attempt to avoid spambots)
+
+    hr
+
+    h3 Links
+    p
+      a(href="https://github.com/GarboMuffin/byp") Source Code
+    p
+      a(href="compat") WIP Compatibility Chart
+
+    small I know this site is ugly. It's a work in progress.

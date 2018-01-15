@@ -1,6 +1,6 @@
 {
   "name": "byp",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Bypass EVERYTHING",
   "main": "dist/index.js",
   "scripts": {

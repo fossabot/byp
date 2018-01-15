@@ -1,0 +1,81 @@
+doctype
+html
+  head
+    title _Byp Compatibility
+    style.
+      /* base styles */
+      body {
+        font-family: sans-serif;
+      }
+      a {
+        color: blue;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      a:active {
+        color: red;
+      }
+
+      td, th {
+        text-align: left;
+        padding: 5px;
+      }
+      
+      .compat {
+
+      }
+      .compat-green {
+        background-color: limegreen;
+      }
+      .compat-yellow {
+        background-color: yellow;
+      }
+      .compat-red {
+        background-color: red;
+      }
+  body
+    h1 Compatibility
+    hr
+
+    //- 1 = Not at all
+    //- 5 = Perfect
+    mixin site(website, compat)
+      tr
+        td
+          if website
+            if website.url
+              a(href=website.url)= website.name
+            else
+              | #{website.name}
+          else
+            i Hey moron, you forgot the name.
+
+        if compat
+          td(class="compat compat-" + compat.type)= compat.text
+        else
+          td(class="compat compat-red")
+            i Unknown
+
+        td
+          if block
+            block
+          else
+            i None
+
+    table
+      tr
+        th Thing
+        th Compatibility
+        th Notes
+
+      +site({name: "Google reCAPTCHA"}, {text: "Broken", type: "red"})
+
+      +site({name: "Any Cloudflare Website"}, {text: "Partial", type: "yellow"})
+        | Sites that show a "Please wait before accessing dankmemes.com" (or similar) will not work.
+
+      +site({name: "Discord", url: "https://discordapp.com/channels/@me"}, {text: "Very Good", type: "green"}).
+        Chat works. Sign in works. Voice works.
+        Visiting the home page then clicking "Login" will send you to the real discord instead of this site.
+        To work around this, use the link provided here. Trust me, just use it.

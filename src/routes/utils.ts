@@ -10,8 +10,9 @@ export function redirectToSubmit(req: express.Request, res: express.Response, ms
 }
 
 export function clearCookies(req: express.Request, res: express.Response) {
-  res.clearCookie(BYP_ORIGIN_COOKIE);
-  res.clearCookie(BYP_SUBMIT_MSG_COOKIE);
+  for (const cookie of Object.keys(req.cookies)) {
+    res.clearCookie(cookie);
+  }
 }
 
 // URL PARSING

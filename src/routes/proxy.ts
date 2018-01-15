@@ -1,15 +1,16 @@
 import * as express from "express";
 import * as request from "request";
 import { URL } from "url";
-import { BYP_ORIGIN_COOKIE, BYP_SUBMIT_MSG_COOKIE } from "../config";
+import { BYP_ORIGIN_COOKIE, BYP_SUBMIT_MSG_COOKIE, BYP_API_ROUTE } from "../config";
 import { logger } from "../logger";
 import { redirectToSubmit, isValidUrl } from "./utils";
 
 // Headers that we do NOT want to send in piped requests
 const BLACKLISTED_HEADERS = [
   // can block sites from loading scripts on this domain
-  // idea: send this header but also add in an exception for this site because we can manipulate all that
+  // idea: send these headers but also add in an exception for this site because we can manipulate all that
   "content-security-policy",
+  "x-xss-protection",
 
   // we manage our own hsts settings
   "strict-transport-security",
@@ -26,6 +27,8 @@ function handleProxyRequest(req: express.Request, res: express.Response) {
   }
 
   // remove cookies that are not the origin cookie
+  // might make a larger "whitelist" of sorts later
+  // (eg. some things like cloudflare cookies may want to be allowed)
   for (const key of Object.keys(req.cookies)) {
     if (key !== BYP_ORIGIN_COOKIE) {
       res.clearCookie(key);
@@ -35,9 +38,24 @@ function handleProxyRequest(req: express.Request, res: express.Response) {
   const targetUrl = originUrl + req.url;
   logger.info("Target URL: " + targetUrl);
 
-  // Make the request
+  pipeRequest(req, res, targetUrl);
+}
+
+function handleOneFile(req: express.Request, res: express.Response) {
+  const url = req.query.url;
+  if (typeof url !== "string" || !isValidUrl(url)) {
+    res.status(400);
+    res.send("No URL Provided (400 Bad Request)");
+  }
+
+  logger.info("Target URL: " + url);
+
+  pipeRequest(req, res, url);
+}
+
+function pipeRequest(req: express.Request, res: express.Response, path: string) {
   const requestOptions = getRequestOptions(req, res);
-  const rq = request(targetUrl, requestOptions);
+  const rq = request(path, requestOptions);
 
   // We don't use normal piping here in order to do a few more things you can't normally do.
 
@@ -56,13 +74,17 @@ function handleProxyRequest(req: express.Request, res: express.Response) {
       return;
     }
 
-    type = contentType.split(" ")[0].replace(/;/g, "");
+    // set content type to match the one provided by the resource
+    res.contentType(contentType);
 
+    // extract the first part of the type
+    type = contentType.split("; ")[0];
+
+    // copy headers from the request
     for (const key of Object.keys(e.headers)) {
-      const val = e.headers[key];
-
       // send headers that aren't blacklisted
       if (BLACKLISTED_HEADERS.indexOf(key.toLowerCase()) === -1) {
+        const val = e.headers[key];
         res.setHeader(key, val as string | string[]);
       }
     }
@@ -75,14 +97,13 @@ function handleProxyRequest(req: express.Request, res: express.Response) {
   // We override the end function to also write our script before ending.
   rq.on("end", () => {
     // Only inject our script if type is text/html
-    // We don't want to inject it onto javascript or images because that breaks things
+    // We don't want to inject it into anything else because that breaks things
     if (type === "text/html") {
-      res.write("<script src=\"/_byp/_doc_script.js\"></script>");
+      res.write("<script src=\"/_byp_doc_script.js\"></script>");
     }
 
     res.end();
   });
-
 }
 
 function getRequestOptions(req: express.Request, res: express.Response): request.CoreOptions {
@@ -98,6 +119,8 @@ function getRequestOptions(req: express.Request, res: express.Response): request
 }
 
 const router = express.Router();
+
+router.use(BYP_API_ROUTE + "onefile", (req, res) => handleOneFile(req, res));
 
 // actually handle requests
 router.use((req, res) => handleProxyRequest(req, res));

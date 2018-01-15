@@ -1,0 +1,4 @@
+ * Use service workers to redirect requests
+ * Implement more safety features
+ * Fix request types other than GET
+ * Fix cookies
